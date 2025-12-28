@@ -252,7 +252,7 @@ class App(TrameApp):
 
 def main():
     app = App()
-    app.server.start()
+    app.server.start(host="0.0.0.0")
 
 
 if __name__ == "__main__":
