@@ -40,7 +40,7 @@ jobs:
           context: ./examples/06_vtk/04_wasm
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            matthewengineering/${{ env.IMAGE_NAME }}:latest
           # Push the digest tag separately after build
           outputs: type=docker
           load: false
