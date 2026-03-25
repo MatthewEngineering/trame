@@ -27,18 +27,28 @@ jobs:
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # Build Docker image
-      - name: Build Docker image
-        id: set-image
-        run: |
-          IMAGE_SHA=${GITHUB_SHA}
-          docker build -t ghcr.io/matthewengineering/trame:latest \
-                       -t ghcr.io/matthewengineering/trame:$IMAGE_SHA .
-          echo "IMAGE_SHA=$IMAGE_SHA" >> $GITHUB_ENV
-          echo "::set-output name=image-sha::$IMAGE_SHA"
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./examples/06_vtk/04_wasm
+          push: true
+          tags: |
+            ghcr.io/matthewengineering/trame:latest
+            ghcr.io/matthewengineering/trame:${{ github.sha }}
 
-      # Push Docker image
-      - name: Push Docker image
-        run: |
-          docker push ghcr.io/matthewengineering/trame:latest
-          docker push ghcr.io/matthewengineering/trame:${{ env.IMAGE_SHA }}
+      # # Build Docker image
+      # - name: Build Docker image
+      #   id: set-image
+      #   context: ./examples/06_vtk/04_wasm        
+      #   run: |
+      #     IMAGE_SHA=${GITHUB_SHA}
+      #     docker build -t ghcr.io/matthewengineering/trame:latest \
+      #                  -t ghcr.io/matthewengineering/trame:$IMAGE_SHA .
+      #     echo "IMAGE_SHA=$IMAGE_SHA" >> $GITHUB_ENV
+      #     echo "::set-output name=image-sha::$IMAGE_SHA"
+
+      # # Push Docker image
+      # - name: Push Docker image
+      #   run: |
+      #     docker push ghcr.io/matthewengineering/trame:latest
+      #     docker push ghcr.io/matthewengineering/trame:${{ env.IMAGE_SHA }}
